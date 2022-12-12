@@ -42,10 +42,28 @@ namespace MealCenter.Orders.Infrastructure.Repository
             return await _context.Orders.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id);
         }
 
+        public async Task<Order> GetDraftOrderByClientId(Guid clientId)
+        {
+            var order = await _context.Orders.AsNoTracking()
+                .Where(o => o.ClientId == clientId && o.OrderStatus == OrderStatus.Draft).FirstOrDefaultAsync();
+
+            if (order == null) return null;
+
+            await _context.Entry(order).Collection(o => o.MenuOptionToOrders).LoadAsync();
+
+            return order;
+        }
+
         public async Task<MenuOptionToOrder> GetMenuOptionToOrderById(Guid id)
         {
             return await _context.MenuOptionsToOrder.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id);
 
+        }
+
+        public async Task<MenuOptionToOrder> GetMenuOptionToOrderByOrder(Guid orderId, Guid menuOptionId, Guid productId)
+        {
+            return await _context.MenuOptionsToOrder.AsNoTracking()
+                .FirstOrDefaultAsync(o => o.OrderId == orderId && (o.MenuOptionId == menuOptionId || o.ProductId == productId));
         }
 
         public void Remove(Order order)
@@ -72,6 +90,5 @@ namespace MealCenter.Orders.Infrastructure.Repository
         {
             throw new NotImplementedException();
         }
-
     }
 }

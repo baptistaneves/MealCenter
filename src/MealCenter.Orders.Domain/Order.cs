@@ -31,6 +31,11 @@ namespace MealCenter.Orders.Domain
             Amount = MenuOptionToOrders.Sum(m => m.CalculateSubtotal());
         }
 
+        public bool ExistingMenuOptionToOrder(MenuOptionToOrder menuOptionToOrder)
+        {
+            return _menuOptionToOrders.Any(m => m.MenuOptionId == menuOptionToOrder.MenuOptionId || m.ProductId == menuOptionToOrder.ProductId);
+        }
+
         public MenuOptionToOrder MenuOptionAlreadyExistsInOrder(MenuOptionToOrder menuOptionToOrder)
         {           
             if (_menuOptionToOrders.Any(m => m.MenuOptionId == menuOptionToOrder.MenuOptionId))
@@ -102,6 +107,17 @@ namespace MealCenter.Orders.Domain
             _menuOptionToOrders.Add(menuOptionToOrder);
 
             CalculteOrderAmount();
+        }
+
+        public void UpdateUnits(MenuOptionToOrder menuOptionToOrder, int menuOptionUnit, int productUnit)
+        {
+            if(menuOptionUnit > 0)
+                menuOptionToOrder.UpdateMenuOptionQuantity(menuOptionUnit);
+
+            if(productUnit > 0)
+                menuOptionToOrder.UpdateProductQuantity(productUnit);
+
+            UpdateMenuOptionInOrder(menuOptionToOrder);
         }
 
         public void DraftOrder()

@@ -19,11 +19,11 @@ namespace MealCenter.Orders.Application.Commands.Validators
             {
                 RuleFor(o => o.ProductPrice)
                     .NotEmpty().WithMessage("The price of product is required")
-                    .GreaterThan(1).WithMessage("The price of product must be greater than 0");
+                    .GreaterThan(0).WithMessage("The price of product must be greater than 0");
 
                 RuleFor(o => o.ProductQuantity)
                     .NotEmpty().WithMessage("The quantity of product is required")
-                    .GreaterThan(1).WithMessage("The quantity of product must be greater than 0");
+                    .GreaterThan(0).WithMessage("The quantity of product must be greater than 0");
 
                 RuleFor(o => o.ProductName)
                     .NotEmpty().WithMessage("The name of product is required");
@@ -35,11 +35,11 @@ namespace MealCenter.Orders.Application.Commands.Validators
             {
                 RuleFor(o => o.MenuOptionPrice)
                     .NotEmpty().WithMessage("The price of menu option is required")
-                    .GreaterThan(1).WithMessage("The price of menu option must be greater than 0");
+                    .GreaterThan(0).WithMessage("The price of menu option must be greater than 0");
 
                 RuleFor(o => o.MenuOptionQuantity)
                     .NotEmpty().WithMessage("The quantity of menu option is required")
-                    .GreaterThan(1).WithMessage("The quantity of product must be greater than 0");
+                    .GreaterThan(0).WithMessage("The quantity of product must be greater than 0");
 
                 RuleFor(o => o.MenuOptionName)
                     .NotEmpty().WithMessage("The name of menu option is required");
@@ -49,7 +49,7 @@ namespace MealCenter.Orders.Application.Commands.Validators
             When(o => o.ProductId == Guid.Empty && o.MenuOptionId == Guid.Empty, () =>
             {
                 RuleFor(o => o.MenuOptionId)
-                    .NotEqual(Guid.Empty).WithMessage("A product or menu option must be informed to proceed with the order");
+                    .NotEqual(Guid.Empty).WithMessage("Product or menu option must be informed to proceed with the order");
             });
         }
     }

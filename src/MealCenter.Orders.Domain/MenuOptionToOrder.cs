@@ -18,10 +18,9 @@ namespace MealCenter.Orders.Domain
         //EF Rel.
         public Order Order { get; private set; }
 
-        public MenuOptionToOrder(Guid orderId, Guid menuOptionId, Guid productId, string productName,
+        public MenuOptionToOrder(Guid menuOptionId, Guid productId, string productName,
             string menuOptionName, decimal productPrice, decimal menuOptionPrice, int productQuantity, int menuOptionQuantity)
         {
-            OrderId = orderId;
             MenuOptionId = menuOptionId;
             ProductId = productId;
             ProductName = productName;
@@ -61,6 +60,7 @@ namespace MealCenter.Orders.Domain
 
         public void UpdateProductQuantity(int units)
         {
+
             ProductQuantity = units;
         }
     }
