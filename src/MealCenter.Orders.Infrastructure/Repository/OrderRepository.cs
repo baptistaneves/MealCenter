@@ -54,6 +54,11 @@ namespace MealCenter.Orders.Infrastructure.Repository
             return order;
         }
 
+        public async Task<IEnumerable<Order>> GetOrderListByClientId(Guid clientId)
+        {
+            return await _context.Orders.AsNoTracking().Where(o => o.ClientId == clientId ).ToListAsync();
+        }
+
         public async Task<MenuOptionToOrder> GetMenuOptionToOrderById(Guid id)
         {
             return await _context.MenuOptionsToOrder.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id);
@@ -90,5 +95,6 @@ namespace MealCenter.Orders.Infrastructure.Repository
         {
             throw new NotImplementedException();
         }
+
     }
 }

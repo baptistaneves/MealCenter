@@ -9,6 +9,7 @@ namespace MealCenter.Orders.Domain
         void Remove(Order order);
         Task<Order> GetById(Guid id);
         Task<IEnumerable<Order>> GetAll();
+        Task<IEnumerable<Order>> GetOrderListByClientId(Guid client);
         Task<Order> GetDraftOrderByClientId(Guid clientId);
 
         void AddMenuOptionToOrder(MenuOptionToOrder menuOptionToOrder);

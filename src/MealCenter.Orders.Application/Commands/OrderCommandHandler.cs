@@ -9,7 +9,9 @@ namespace MealCenter.Orders.Application.Commands
     public class OrderCommandHandler :
         IRequestHandler<AddMenuOptionToOrderCommand, bool>,
         IRequestHandler<UpdateMenuOptionToOrderCommand, bool>,
-        IRequestHandler<RemoveMenuOptionToOrderCommand, bool>
+        IRequestHandler<RemoveMenuOptionToOrderCommand, bool>,
+        IRequestHandler<StartOrderCommand, bool>,
+        IRequestHandler<CloseOrderCommand, bool>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMediatorHandler _mediatorHandler;
@@ -104,6 +106,42 @@ namespace MealCenter.Orders.Application.Commands
             _orderRepository.RemoveMenuOptionToOrder(menuOptionToOrder);
             _orderRepository.Update(order);
 
+            return await _orderRepository.UnitOfWork.SaveAsync(cancellationToken);
+        }
+
+        public async Task<bool> Handle(StartOrderCommand command, CancellationToken cancellationToken)
+        {
+            if (ValidateCommand(command)) return false;
+
+            var order = await _orderRepository.GetDraftOrderByClientId(command.ClientId);
+
+            if (order == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("order", "Order not found"));
+                return false;
+            }
+
+            order.StartOrder();
+
+            _orderRepository.Update(order);
+            return await _orderRepository.UnitOfWork.SaveAsync(cancellationToken);
+        }
+
+        public async Task<bool> Handle(CloseOrderCommand command, CancellationToken cancellationToken)
+        {
+            if (ValidateCommand(command)) return false;
+
+            var order = await _orderRepository.GetDraftOrderByClientId(command.ClientId);
+
+            if (order == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("order", "Order not found"));
+                return false;
+            }
+
+            order.CloseOrder();
+
+            _orderRepository.Update(order);
             return await _orderRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 

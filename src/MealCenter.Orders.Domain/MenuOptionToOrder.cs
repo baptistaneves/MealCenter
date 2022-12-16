@@ -40,7 +40,9 @@ namespace MealCenter.Orders.Domain
 
         public decimal CalculateSubtotal()
         {
-            return (MenuOptionPrice * MenuOptionQuantity) + (ProductPrice * ProductPrice);
+            Subtotal = (MenuOptionPrice * MenuOptionQuantity) + (ProductPrice * ProductPrice);
+
+            return Subtotal;
         }
 
         public void AddUnitsToMenuOptionQuantity(int units)

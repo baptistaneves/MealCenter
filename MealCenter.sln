@@ -33,11 +33,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealCenter.Catalog.Domain",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealCenter.Catalog.Infrastructure", "src\MealCenter.Catalog.Infrastructure\MealCenter.Catalog.Infrastructure.csproj", "{B10C6502-ED33-41D8-BCF1-FEEC6ACA423E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealCenter.Orders.Application", "src\MealCenter.Orders.Application\MealCenter.Orders.Application.csproj", "{78B29A02-EECE-4CC6-990C-1EA4A1A2B444}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealCenter.Orders.Application", "src\MealCenter.Orders.Application\MealCenter.Orders.Application.csproj", "{78B29A02-EECE-4CC6-990C-1EA4A1A2B444}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealCenter.Orders.Infrastructure", "src\MealCenter.Orders.Infrastructure\MealCenter.Orders.Infrastructure.csproj", "{1DB5A9CC-72BC-4DEA-BDF7-6341C7CF6361}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealCenter.Orders.Infrastructure", "src\MealCenter.Orders.Infrastructure\MealCenter.Orders.Infrastructure.csproj", "{1DB5A9CC-72BC-4DEA-BDF7-6341C7CF6361}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealCenter.Orders.Domain", "src\MealCenter.Orders.Domain\MealCenter.Orders.Domain.csproj", "{9F255676-9FBF-4FFB-8CDE-ED3326B7FDDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealCenter.Orders.Domain", "src\MealCenter.Orders.Domain\MealCenter.Orders.Domain.csproj", "{9F255676-9FBF-4FFB-8CDE-ED3326B7FDDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealCenter.Identity.Application", "src\MealCenter.Identity.Application\MealCenter.Identity.Application.csproj", "{BD863A07-76BF-4DC1-B7B6-A5172BDA55B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealCenter.Identity.Infrastructure", "src\MealCenter.Identity.Infrastructure\MealCenter.Identity.Infrastructure.csproj", "{8AD2243A-2ABC-41B0-B52B-E3996F898A21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +93,14 @@ Global
 		{9F255676-9FBF-4FFB-8CDE-ED3326B7FDDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F255676-9FBF-4FFB-8CDE-ED3326B7FDDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F255676-9FBF-4FFB-8CDE-ED3326B7FDDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD863A07-76BF-4DC1-B7B6-A5172BDA55B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD863A07-76BF-4DC1-B7B6-A5172BDA55B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD863A07-76BF-4DC1-B7B6-A5172BDA55B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD863A07-76BF-4DC1-B7B6-A5172BDA55B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AD2243A-2ABC-41B0-B52B-E3996F898A21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AD2243A-2ABC-41B0-B52B-E3996F898A21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AD2243A-2ABC-41B0-B52B-E3996F898A21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AD2243A-2ABC-41B0-B52B-E3996F898A21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +122,8 @@ Global
 		{78B29A02-EECE-4CC6-990C-1EA4A1A2B444} = {38166C75-AEB9-43ED-93E0-6D23D5526006}
 		{1DB5A9CC-72BC-4DEA-BDF7-6341C7CF6361} = {38166C75-AEB9-43ED-93E0-6D23D5526006}
 		{9F255676-9FBF-4FFB-8CDE-ED3326B7FDDE} = {38166C75-AEB9-43ED-93E0-6D23D5526006}
+		{BD863A07-76BF-4DC1-B7B6-A5172BDA55B0} = {5835DE7E-D80C-45BD-8A4C-D20C224DB010}
+		{8AD2243A-2ABC-41B0-B52B-E3996F898A21} = {5835DE7E-D80C-45BD-8A4C-D20C224DB010}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA012A23-561B-4CB0-A9D2-6F9B7E6CDF49}
