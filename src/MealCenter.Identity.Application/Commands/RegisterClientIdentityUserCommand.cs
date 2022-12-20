@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace MealCenter.Identity.Application.Commands
 {
-    public class RegisterClientIdentityCommand : IRequest<string>
+    public class RegisterClientIdentityUserCommand : IRequest<IdentityUser>
     {
         public string Email { get; set; }
         public string Password { get; set; }
