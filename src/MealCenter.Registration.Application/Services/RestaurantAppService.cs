@@ -165,6 +165,71 @@ namespace MealCenter.Registration.Application.Services
             await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 
+        public async Task<int> GetTheNumberOfRegisteredRestaurants()
+        {
+            return await _restaurantRepository.GetTheNumberOfRegisteredRestaurants();
+        }
+
+        public async Task FreeTable(Guid id, CancellationToken cancellationToken)
+        {
+            var table = await _restaurantRepository.GetTableById(id);
+            if(table == null)
+            {
+                await _meditorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.TableNotFound));
+                return;
+            }
+
+            table.FreeTable();
+
+            _restaurantRepository.UpdateTable(table);
+            await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
+        }
+
+        public async Task OccupyTable(Guid id, Guid clientId, CancellationToken cancellationToken)
+        {
+            var table = await _restaurantRepository.GetTableById(id);
+            if (table == null)
+            {
+                await _meditorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.TableNotFound));
+                return;
+            }
+
+            table.OccupyTable(clientId);
+
+            _restaurantRepository.UpdateTable(table);
+            await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
+        }
+
+        public async Task ActivateRestaurant(Guid id, CancellationToken cancellationToken)
+        {
+            var restaurant = await _restaurantRepository.GetById(id);
+            if (restaurant == null)
+            {
+                await _meditorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.RestaurantNotFound));
+                return;
+            }
+
+            restaurant.Activate();
+
+            _restaurantRepository.Update(restaurant);
+            await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
+        }
+
+        public async Task DeactivateRestaurant(Guid id, CancellationToken cancellationToken)
+        {
+            var restaurant = await _restaurantRepository.GetById(id);
+            if (restaurant == null)
+            {
+                await _meditorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.RestaurantNotFound));
+                return;
+            }
+
+            restaurant.Deactivate();
+
+            _restaurantRepository.Update(restaurant);
+            await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
+        }
+
         public async Task Update(UpdateRestaurant restaurant, CancellationToken cancellationToken)
         {
             if (!Validate(new UpdateRestaurantValidator(), restaurant)) return;
@@ -230,5 +295,6 @@ namespace MealCenter.Registration.Application.Services
         {
             _restaurantRepository?.Dispose();
         }
+
     }
 }

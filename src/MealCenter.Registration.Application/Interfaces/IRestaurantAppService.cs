@@ -7,8 +7,11 @@ namespace MealCenter.Registration.Application.Interfaces
     {
         Task<IEnumerable<Restaurant>> GetAll();
         Task<Restaurant> GetById(Guid id);
+        Task<int> GetTheNumberOfRegisteredRestaurants();
         Task Add(CreateRestaurant newRestaurant, string identityUserId, CancellationToken cancellationToken);
         Task Update(UpdateRestaurant restaurant, CancellationToken cancellationToken);
+        Task ActivateRestaurant(Guid id, CancellationToken cancellationToken);
+        Task DeactivateRestaurant(Guid id, CancellationToken cancellationToken);
         Task Remove(Guid id, CancellationToken cancellationToken);
 
         Task<Table> GetTableById(Guid id);
@@ -17,6 +20,8 @@ namespace MealCenter.Registration.Application.Interfaces
         Task AddTable(CreateTable newTable, CancellationToken cancellationToken);
         Task UpdateTable(UpdateTable table, CancellationToken cancellationToken);
         Task RemoveTable(Guid id, CancellationToken cancellationToken);
+        Task FreeTable(Guid id, CancellationToken cancellationToken);
+        Task OccupyTable(Guid id, Guid clientId, CancellationToken cancellationToken);
 
         Task<Menu> GetMenuById(Guid id);
         Task<IEnumerable<Menu>> GetAllMenu();

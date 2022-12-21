@@ -7,8 +7,11 @@ namespace MealCenter.Registration.Application.Interfaces
     {
         Task<IEnumerable<Client>> GetAll();
         Task<Client> GetById(Guid id);
+        Task<int> GetTheNumberOfRegisteredClients();
         Task Add(CreateClient client, string identityUserId, CancellationToken cancellationToken);
         Task Update(UpdateClient client, CancellationToken cancellationToken);
         Task Remove(Guid id, CancellationToken cancellationToken);
+        Task ActivateClient(Guid id, CancellationToken cancellationToken);
+        Task DeactivateClient(Guid id, CancellationToken cancellationToken);
     }
 }

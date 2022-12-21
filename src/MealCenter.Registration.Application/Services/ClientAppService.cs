@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using MealCenter.Core.Communication.Mediator;
+using MealCenter.Core.Messages.CommonMessages.Notifications;
 using MealCenter.Registration.Application.Contracts.Clients;
+using MealCenter.Registration.Application.ErrorMessages;
 using MealCenter.Registration.Application.Interfaces;
 using MealCenter.Registration.Application.Validators.Clients;
 using MealCenter.Registration.Domain.Clients;
@@ -9,11 +12,13 @@ namespace MealCenter.Registration.Application.Services
     public class ClientAppService : BaseService, IClientAppService
     {
         private readonly IClientRepository _clientRepository;
+        private readonly IMediatorHandler _mediatorHandler;
         private readonly IMapper _mapper;
-        public ClientAppService(IClientRepository clientRepository, IMapper mapper)
+        public ClientAppService(IClientRepository clientRepository, IMapper mapper, IMediatorHandler mediatorHandler)
         {
             _clientRepository = clientRepository;
             _mapper = mapper;
+            _mediatorHandler = mediatorHandler;
         }
 
         public async Task Add(CreateClient request, string identityUserId, CancellationToken cancellationToken)
@@ -37,6 +42,11 @@ namespace MealCenter.Registration.Application.Services
             return await _clientRepository.GetById(id);
         }
 
+        public async Task<int> GetTheNumberOfRegisteredClients()
+        {
+            return await _clientRepository.GetTheNumberOfRegisteredClients();
+        }
+
         public async Task Remove(Guid id, CancellationToken cancellationToken)
         {
             _clientRepository.Remove(await _clientRepository.GetById(id));
@@ -50,6 +60,36 @@ namespace MealCenter.Registration.Application.Services
 
             _clientRepository.Update(_mapper.Map<Client>(client));
 
+            await _clientRepository.UnitOfWork.SaveAsync(cancellationToken);
+        }
+
+        public async Task ActivateClient(Guid id, CancellationToken cancellationToken)
+        {
+            var client = await _clientRepository.GetById(id);
+            if (client == null) 
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("client", ClientErrorMessages.ClientNotFound));
+                return; 
+            }
+
+            client.Activate();
+
+            _clientRepository.Update(client);
+            await _clientRepository.UnitOfWork.SaveAsync(cancellationToken);
+        }
+
+        public async Task DeactivateClient(Guid id, CancellationToken cancellationToken)
+        {
+            var client = await _clientRepository.GetById(id);
+            if (client == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("client", ClientErrorMessages.ClientNotFound));
+                return;
+            }
+
+            client.Deactivate();
+
+            _clientRepository.Update(client);
             await _clientRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 

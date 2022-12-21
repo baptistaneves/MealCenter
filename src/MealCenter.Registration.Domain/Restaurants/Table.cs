@@ -17,11 +17,10 @@ namespace MealCenter.Registration.Domain.Restaurants
         public Restaurant Restaurant { get; private set; }
         public Client Client { get; private set; }
 
-        public Table(Guid restaurantId, Guid clientId, string state, int tableNumber, bool status)
+        public Table(Guid restaurantId, int tableNumber, bool status)
         {
             RestaurantId = restaurantId;
-            ClientId = clientId;
-            State = state;
+            State = TableState.TableIsFree;
             TableNumber = tableNumber;
             Status = status;
         }
@@ -35,7 +34,16 @@ namespace MealCenter.Registration.Domain.Restaurants
 
         public void Deactivate() => Status = false;
 
-        public void FreeTable() => State = TableState.TableIsFree;
-        public void OccupyTable() => State = TableState.TableIsOccupied;
+        public void FreeTable()
+        {
+            State = TableState.TableIsFree;
+            ClientId = Guid.Empty;
+        }
+        public void OccupyTable(Guid clientId)
+        {
+            State = TableState.TableIsOccupied;
+            ClientId = clientId;
+        }
+
     }
 }

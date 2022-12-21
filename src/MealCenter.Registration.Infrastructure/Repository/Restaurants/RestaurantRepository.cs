@@ -56,6 +56,11 @@ namespace MealCenter.Registration.Infrastructure.Repository.Restaurants
             return await _context.Tables.AsNoTracking().ToListAsync();
         }
 
+        public async Task<IEnumerable<Table>> GetAllFreeTable()
+        {
+            return await _context.Tables.AsNoTracking().Where(t => t.State == TableState.TableIsFree).ToListAsync();
+        }
+
         public async Task<Restaurant> GetById(Guid id)
         {
             return await _context.Restaurants.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
@@ -131,6 +136,11 @@ namespace MealCenter.Registration.Infrastructure.Repository.Restaurants
             _context.Tables.Remove(table);
         }
 
+        public async Task<int> GetTheNumberOfRegisteredRestaurants()
+        {
+            return await _context.Restaurants.CountAsync();
+        }
+
         public async Task<bool> RestaurantAlreadyExists(string name)
         {
             return await _context.Restaurants.AsNoTracking().Where(r => r.Name == name).AnyAsync();
@@ -176,5 +186,6 @@ namespace MealCenter.Registration.Infrastructure.Repository.Restaurants
         {
             _context?.Dispose();
         }
+       
     }
 }

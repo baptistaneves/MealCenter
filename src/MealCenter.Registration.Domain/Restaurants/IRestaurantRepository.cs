@@ -6,6 +6,7 @@ namespace MealCenter.Registration.Domain.Restaurants
     {
         Task<IEnumerable<Restaurant>> GetAll();
         Task<Restaurant> GetById(Guid id);
+        Task<int> GetTheNumberOfRegisteredRestaurants();
         Task<bool> RestaurantAlreadyExists(string name);
         Task<bool> RestaurantAlreadyExists(Guid id, string name);
         void Add(Restaurant entity);
@@ -14,6 +15,7 @@ namespace MealCenter.Registration.Domain.Restaurants
 
         Task<Table> GetTableById(Guid id);
         Task<IEnumerable<Table>> GetAllTable();
+        Task<IEnumerable<Table>> GetAllFreeTable();
         Task<IEnumerable<Table>> GetTablesByRestaurantId(Guid restaurantId);
         Task<bool> TableAlreadyExists(int tableNumber);
         Task<bool> TableAlreadyExists(Guid id, int tableNumber);
