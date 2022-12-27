@@ -17,7 +17,7 @@ namespace MealCenter.Identity.Application.QueryHandlers
 
         public async Task<List<UserProfile>> Handle(GetAllAdminUserProfilesQuery request, CancellationToken cancellationToken)
         {
-            return await _context.UserProfiles.AsNoTracking().ToListAsync();
+            return await _context.UserProfiles.AsNoTracking().ToListAsync(cancellationToken);
         }
     }
 }

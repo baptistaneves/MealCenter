@@ -15,7 +15,7 @@ namespace MealCenter.Core.Messages.CommonMessages.Notifications
            _notifications.Add(notification);
         }
 
-        public virtual List<DomainNotification> GetNotification()
+        public virtual List<DomainNotification> GetNotifications()
         {
             return _notifications;
         }

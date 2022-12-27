@@ -5,6 +5,6 @@ namespace MealCenter.Identity.Application.Queries
 {
     public class GetAdminUserProfileByIdentityIdQuery : IRequest<UserProfile>
     {
-        public string IdentityId { get; set; }
+        public Guid Id { get; set; }
     }
 }

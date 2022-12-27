@@ -18,7 +18,7 @@ namespace MealCenter.Identity.Application.QueryHandlers
         public async Task<UserProfile> Handle(GetAdminUserProfileByIdentityIdQuery request, CancellationToken cancellationToken)
         {
            var userProfile = await _context.UserProfiles.AsNoTracking()
-                .FirstOrDefaultAsync(u => u.IdentityId == request.IdentityId, cancellationToken);
+                .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
 
             if (userProfile == null) return null;
 
