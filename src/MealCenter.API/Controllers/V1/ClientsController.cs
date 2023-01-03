@@ -84,7 +84,7 @@
         [ValidateModel]
         public async Task<ActionResult> UpdateClient(Guid id, [FromBody] UpdateClient updateClient, CancellationToken cancellationToken)
         {
-            await _clientAppService.Update(updateClient, cancellationToken);
+            await _clientAppService.Update(id, updateClient, cancellationToken);
             return Response();
         }
 

@@ -47,5 +47,13 @@ namespace MealCenter.Registration.Domain.Clients
         {
             EmailAddress = newEmail;
         }
+
+        public void UpdateClient(string firstName, string lastName, string description, string phone)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Description= description;
+            Phone = phone;
+        }
     }
 }

@@ -67,7 +67,9 @@ namespace MealCenter.Registration.Application.Services
                 return;
             }
 
-            _clientRepository.Update(_mapper.Map<Client>(client));
+            client.UpdateClient(clientUpdated.FirstName, clientUpdated.LastName, clientUpdated.Description, clientUpdated.Phone);
+
+            _clientRepository.Update(client);
 
             await _clientRepository.UnitOfWork.SaveAsync(cancellationToken);
         }

@@ -13,8 +13,6 @@ namespace MealCenter.Registration.Application.Contracts.Clients
         public string LastName { get; set; }
 
         public string Phone { get; set; }
-        public string ImageUrl { get; set; }
         public string Description { get; set; }
-        public bool Status { get; set; }
     }
 }
