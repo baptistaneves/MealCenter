@@ -22,35 +22,42 @@ namespace MealCenter.Registration.Application.Services
             _mediatorHandler = mediatorHandler;
         }
 
-        public async Task Add(CreatePost newPost, CancellationToken cancellationToken)
+        public async Task<Post> Add(CreatePost newPost, CancellationToken cancellationToken)
         {
-            if (!Validate(new CreatePostValidator(), newPost)) return;
+            if (!Validate(new CreatePostValidator(), newPost)) return null;
 
             if(await _postRepository.PostAlreadyExists(newPost.Title))
             {
                 await _mediatorHandler.PublishNotification(new DomainNotification("post", PostErrorMessages.PostTitleAreadyExists));
-                return;
+                return null;
             }
 
-            _postRepository.Add(_mapper.Map<Post>(newPost));
+            var post = _mapper.Map<Post>(newPost);
+
+            _postRepository.Add(post);
 
             await _postRepository.UnitOfWork.SaveAsync(cancellationToken);
+            return post;
         }
 
-        public async Task AddPostComment(CreatePostComment newPostComment, string identityUserId, CancellationToken cancellationToken)
+        public async Task<PostComment> AddPostComment(CreatePostComment newPostComment, string identityUserId, CancellationToken cancellationToken)
         {
-            if (!Validate(new CreatePostCommentValidator(), newPostComment)) return;
+            if (!Validate(new CreatePostCommentValidator(), newPostComment)) return null;
 
-            _postRepository.AddPostComment(new PostComment(newPostComment.PostId, identityUserId, newPostComment.Comment));
+            var postComment = new PostComment(newPostComment.PostId, identityUserId, newPostComment.Comment);
+            _postRepository.AddPostComment(postComment);
 
             await _postRepository.UnitOfWork.SaveAsync(cancellationToken);
+            return postComment;
         }
 
-        public async Task AddPostReaction(CreatePostReaction newReaction, string identityUserId, CancellationToken cancellationToken)
+        public async Task<PostReaction> AddPostReaction(CreatePostReaction newReaction, string identityUserId, CancellationToken cancellationToken)
         {
-            _postRepository.AddPostReaction(new PostReaction(newReaction.PostId, identityUserId, newReaction.ReactionType));
+            var postReaction = new PostReaction(newReaction.PostId, identityUserId, newReaction.ReactionType);
+            _postRepository.AddPostReaction(postReaction);
 
             await _postRepository.UnitOfWork.SaveAsync(cancellationToken);
+            return postReaction;
         }
 
         public async Task<IEnumerable<Post>> GetAll()
@@ -58,14 +65,14 @@ namespace MealCenter.Registration.Application.Services
             return await _postRepository.GetAll();
         }
 
-        public async Task<IEnumerable<PostComment>> GetAllPostComment()
+        public async Task<IEnumerable<PostComment>> GetAllPostComment(Guid postId)
         {
-            return await _postRepository.GetAllPostComment();
+            return await _postRepository.GetAllPostComment(postId);
         }
 
-        public async Task<IEnumerable<PostReaction>> GetAllPostReaction()
+        public async Task<IEnumerable<PostReaction>> GetAllPostReaction(Guid postId)
         {
-            return await _postRepository.GetAllPostReaction();
+            return await _postRepository.GetAllPostReaction(postId);
         }
 
         public async Task<Post> GetById(Guid id)
@@ -83,46 +90,132 @@ namespace MealCenter.Registration.Application.Services
             return await _postRepository.GetPostReactionById(id);
         }
 
-        public async Task Remove(Guid id, CancellationToken cancellationToken)
+        public async Task Remove(Guid id, Guid restaurantId, CancellationToken cancellationToken)
         {
-            _postRepository.Remove(await _postRepository.GetById(id));
+            var post = await _postRepository.GetById(id);
+            if(post == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostNotFound));
+                return;
+            }
+
+            if(post.RestaurantId != restaurantId)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostDeleteNotNotAuthorized));
+                return;
+            }
+
+            _postRepository.Remove(post);
 
             await _postRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 
-        public async Task RemovePostComment(Guid id, CancellationToken cancellationToken)
+        public async Task RemovePostCommentFromPost(Guid postCommentId, Guid postId, Guid restaurantId, string identityId, CancellationToken cancellationToken)
         {
-            _postRepository.RemovePostComment(await _postRepository.GetPostCommentById(id));
+            var post = await _postRepository.GetPostWithPostCommentsIncludedById(postId);
+            if (post == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostNotFound));
+                return;
+            }
+
+            var postComment = post.PostComments.FirstOrDefault(pc => pc.Id == postCommentId);
+            if (postComment == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostCommentNotFound));
+                return;
+            }
+
+            if (post.RestaurantId != restaurantId && postComment.IdentityUserId != identityId)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostCommentRemovelNotNotAuthorized));
+                return;
+            }
+
+            _postRepository.RemovePostComment(postComment);
 
             await _postRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 
-        public async Task RemovePostReaction(Guid id, CancellationToken cancellationToken)
+        public async Task RemovePostReactionFromPost(Guid postReactionId, Guid postId, Guid restaurantId, string identityId, CancellationToken cancellationToken)
         {
-            _postRepository.RemovePostReaction(await _postRepository.GetPostReactionById(id));
+            var post = await _postRepository.GetPostWithPostCommentsIncludedById(postId);
+            if (post == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostNotFound));
+                return;
+            }
+
+            var postReaction = post.PostReactions.FirstOrDefault(pc => pc.Id == postReactionId);
+            if (postReaction == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostReactionNotFound));
+                return;
+            }
+
+            if (post.RestaurantId != restaurantId && postReaction.IdentityUserId != identityId)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostReactionRemovelNotNotAuthorized));
+                return;
+            }
+
+            _postRepository.RemovePostReaction(postReaction);
 
             await _postRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 
-        public async Task Update(UpdatePost post, CancellationToken cancellationToken)
+        public async Task Update(Guid restaurantId, UpdatePost postUpdated, CancellationToken cancellationToken)
         {
-            if (!Validate(new UpdatePostValidator(), post)) return;
+            if (!Validate(new UpdatePostValidator(), postUpdated)) return;
 
-            if(await _postRepository.PostAlreadyExists(post.Id, post.Title))
+            var postInCurrentState = await _postRepository.GetById(postUpdated.Id);
+            if (postInCurrentState == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostNotFound));
+                return;
+            }
+
+            if (postInCurrentState.RestaurantId != restaurantId)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostUpdateNotNotAuthorized));
+                return;
+            }
+
+            if (await _postRepository.PostAlreadyExists(postUpdated.Id, postUpdated.Title))
             {
                 await _mediatorHandler.PublishNotification(new DomainNotification("post", PostErrorMessages.PostTitleAreadyExists));
                 return;
             }
 
-            _postRepository.Update(_mapper.Map<Post>(post));
+            _postRepository.Update(_mapper.Map<Post>(postUpdated));
             await _postRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 
-        public async Task UpdatePostComment(UpdatePostComment postComment, CancellationToken cancellationToken)
+        public async Task UpdatePostComment(Guid postCommentId, Guid postId, Guid restaurantId, string identityId, UpdatePostComment postCommentUpdated, CancellationToken cancellationToken)
         {
-            if (!Validate(new UpdatePostCommentValidator(), postComment)) return;
+            if (!Validate(new UpdatePostCommentValidator(), postCommentUpdated)) return;
 
-            _postRepository.UpdatePostComment(_mapper.Map<PostComment>(postComment));
+            var post = await _postRepository.GetPostWithPostCommentsIncludedById(postId);
+            if (post == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostNotFound));
+                return;
+            }
+
+            var postComment = post.PostComments.FirstOrDefault(pc => pc.Id == postCommentId);
+            if (postComment == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostCommentNotFound));
+                return;
+            }
+
+            if (post.RestaurantId != restaurantId && postComment.IdentityUserId != identityId)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Post", PostErrorMessages.PostCommentRemovelNotNotAuthorized));
+                return;
+            }
+
+            _postRepository.UpdatePostComment(_mapper.Map<PostComment>(postCommentUpdated));
 
             await _postRepository.UnitOfWork.SaveAsync(cancellationToken);
         }

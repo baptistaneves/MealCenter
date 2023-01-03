@@ -11,9 +11,4 @@
         public const string MenuNotFound = "Menu with provided ID was not found.";
         public const string MenuOptionNotFound = "Menu Option with provided ID was not found.";
     }
-
-    internal class PostErrorMessages
-    {
-        public const string PostTitleAreadyExists = "Provided post title name already exists.";
-    }
 }

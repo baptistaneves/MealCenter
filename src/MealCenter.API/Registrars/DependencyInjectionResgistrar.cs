@@ -1,12 +1,19 @@
-﻿using MealCenter.Identity.Application.Queries;
-using MealCenter.Identity.Application.Services;
-
-namespace MealCenter.API.Registrars
+﻿namespace MealCenter.API.Registrars
 {
     public class DependencyInjectionResgistrar : IWebApplicationBuilderRegistrar
     {
         public void RegisterServices(WebApplicationBuilder builder)
         {
+            //Identity
+            builder.Services.AddScoped<IdentityContext>();
+
+            builder.Services.AddScoped<JwtAdminService>();
+            builder.Services.AddScoped<JwtClientService>();
+            builder.Services.AddScoped<JwtRestaurantService>();
+            builder.Services.AddScoped<JwtService>();
+
+            builder.Services.AddMediatR(typeof(GetAllAdminUserProfilesQuery));
+
             //MediatorHandler
             builder.Services.AddScoped<IMediatorHandler, MediatorHandler>();
 
@@ -14,12 +21,15 @@ namespace MealCenter.API.Registrars
             builder.Services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
 
             //Registration
-            builder.Services.AddScoped<JwtAdminService>();
-            builder.Services.AddScoped<JwtClientService>();
-            builder.Services.AddScoped<JwtRestaurantService>();
-            builder.Services.AddScoped<JwtService>();
+            builder.Services.AddScoped<RegistrationContext>();
 
-            builder.Services.AddMediatR(typeof(GetAllAdminUserProfilesQuery));
+            builder.Services.AddScoped<IClientRepository, ClientRepository>();
+            builder.Services.AddScoped<IClientAppService, ClientAppService>();
+
+            builder.Services.AddScoped<IPostAppService, PostAppService>();
+            builder.Services.AddScoped<IPostRepository, PostRepository>();
+
+            builder.Services.AddAutoMapper(typeof(RegistrationRequestToDomainMappingProfile));
         }
     }
 }

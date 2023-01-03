@@ -1,13 +1,12 @@
 ﻿using MealCenter.Core.Communication.Mediator;
 using MealCenter.Core.Messages.CommonMessages.Notifications;
 using MealCenter.Identity.Application.Commands;
-using MealCenter.Identity.Application.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace MealCenter.Identity.Application.Handlers
 {
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginDto>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand, IdentityUser>
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
@@ -21,7 +20,7 @@ namespace MealCenter.Identity.Application.Handlers
             _mediatorHandler = mediatorHandler;
         }
 
-        public async Task<LoginDto> Handle(LoginCommand command, CancellationToken cancellationToken)
+        public async Task<IdentityUser> Handle(LoginCommand command, CancellationToken cancellationToken)
         {
             var identity = await CheckEmail(command.Email);
 
@@ -29,9 +28,7 @@ namespace MealCenter.Identity.Application.Handlers
 
             if (!await CheckPassword(identity, command.Password)) return null;
 
-            var roles = await _userManager.GetRolesAsync(identity);
-
-            return new LoginDto { IdentityUser = identity, Role = roles.FirstOrDefault()};
+            return identity;
         }
 
         private async Task<IdentityUser> CheckEmail(string email)

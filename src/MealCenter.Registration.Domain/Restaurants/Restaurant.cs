@@ -10,6 +10,8 @@ namespace MealCenter.Registration.Domain.Restaurants
         public string Location { get; private set; }
         public string ImageUrl { get; private set; }
         public string Description { get; private set; }
+        public string Phone { get; private set; }
+        public string EmailAddress { get; private set; }
         public bool Status { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime LastModified { get; private set; }
@@ -19,7 +21,7 @@ namespace MealCenter.Registration.Domain.Restaurants
         private readonly List<Table> _tables;
 
         public IReadOnlyCollection<Menu> Menus;
-        public IReadOnlyCollection<Menu> Tables;
+        public IReadOnlyCollection<Table> Tables;
         public IReadOnlyCollection<Post> Posts;
 
         public Restaurant(string identityUserId, string name, string location, string imageUrl, bool status, 
@@ -32,6 +34,9 @@ namespace MealCenter.Registration.Domain.Restaurants
             Status = status;
             Description = description;
         }
+
+        //EF
+        protected Restaurant() { }
 
         public void Activate() => Status = true;
 

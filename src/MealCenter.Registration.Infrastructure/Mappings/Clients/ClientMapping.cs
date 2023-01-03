@@ -24,6 +24,12 @@ namespace MealCenter.Registration.Infrastructure.Mappings.Clients
             builder.Property(c => c.Description)
                 .HasColumnType("varchar(50)");
 
+            builder.Property(c => c.Phone)
+                .HasColumnType("varchar(20)");
+
+            builder.Property(c => c.EmailAddress)
+               .HasColumnType("varchar(255)");
+
             builder.Property(c => c.Status)
                 .HasColumnType("bit");
 

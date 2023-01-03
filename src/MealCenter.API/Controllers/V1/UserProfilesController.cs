@@ -22,11 +22,11 @@ namespace MealCenter.API.Controllers.V1
             return Response(result);
         }
 
-        [HttpGet(ApiRoutes.Identity.GetAdminUserProfileIdentityById)]
+        [HttpGet(ApiRoutes.Identity.GetAdminUserProfileById)]
         [ValidateGuid("{id}")]
         public async Task<ActionResult> GetAdminUserProfileById(string id, CancellationToken token)
         {
-            var query = new GetAdminUserProfileByIdentityIdQuery { Id = Guid.Parse(id) };
+            var query = new GetAdminUserProfileByIdentityIdQuery { IdentityId = id };
 
             var result =  await _mediator.Send(query, token);
 

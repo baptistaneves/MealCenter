@@ -22,64 +22,72 @@ namespace MealCenter.Registration.Application.Services
             _meditorHandler = meditorHandler;
         }
 
-        public async Task Add(CreateRestaurant newRestaurant, string identityUserId, CancellationToken cancellationToken)
+        public async Task<Restaurant> Add(CreateRestaurant newRestaurant, string identityUserId, CancellationToken cancellationToken)
         {
-            if (!Validate(new CreateRestaurantValidator(), newRestaurant)) return;
+            if (!Validate(new CreateRestaurantValidator(), newRestaurant)) return null;
 
             if(await _restaurantRepository.RestaurantAlreadyExists(newRestaurant.Name))
             {
                 await _meditorHandler.PublishNotification(new DomainNotification("restaurant", RestaurantErrorMessages.RestaurantNameAlreadyExists));
-                return;
+                return null;
             }
 
-            _restaurantRepository.Add(new Restaurant(identityUserId, newRestaurant.Name, newRestaurant.Location, newRestaurant.ImageUrl, newRestaurant.Status, newRestaurant.Description));
+            var restaurant = new Restaurant(identityUserId, newRestaurant.Name, newRestaurant.Location, newRestaurant.ImageUrl, newRestaurant.Status, newRestaurant.Description);
+            _restaurantRepository.Add(restaurant);
 
             await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
+            return restaurant;
         }
 
-        public async Task AddMenu(CreateMenu newMenu, CancellationToken cancellationToken)
+        public async Task<Menu> AddMenu(CreateMenu newMenu, CancellationToken cancellationToken)
         {
-            if (!Validate(new CreateMenuValidator(), newMenu)) return;
+            if (!Validate(new CreateMenuValidator(), newMenu)) return null;
 
             if(await _restaurantRepository.MenuAlreadyExists(newMenu.Type))
             {
                 await _meditorHandler.PublishNotification(new DomainNotification("menu", RestaurantErrorMessages.MenuTypeAlreadyExists));
-                return;
+                return null;
             }
 
-            _restaurantRepository.AddMenu(_mapper.Map<Menu>(newMenu));
+            var menu = _mapper.Map<Menu>(newMenu);
+            _restaurantRepository.AddMenu(menu);
 
             await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
+            return menu;
         }
 
-        public async Task AddMenuOption(CreateMenuOption newMenuOption, CancellationToken cancellationToken)
+        public async Task<MenuOption> AddMenuOption(CreateMenuOption newMenuOption, CancellationToken cancellationToken)
         {
-            if (!Validate(new CreateMenuOptionValidator(), newMenuOption)) return;
+            if (!Validate(new CreateMenuOptionValidator(), newMenuOption)) return null;
 
             if (await _restaurantRepository.MenuAlreadyExists(newMenuOption.Name))
             {
                 await _meditorHandler.PublishNotification(new DomainNotification("menuOption", RestaurantErrorMessages.MenuOptionNameAlreadyExists));
-                return;
+                return null;
             }
 
-            _restaurantRepository.AddMenuOption(_mapper.Map<MenuOption>(newMenuOption));
+            var menuOption = _mapper.Map<MenuOption>(newMenuOption);
+            _restaurantRepository.AddMenuOption(menuOption);
 
             await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
+            return menuOption;
         }
 
-        public async Task AddTable(CreateTable newTable, CancellationToken cancellationToken)
+        public async Task<Table> AddTable(CreateTable newTable, CancellationToken cancellationToken)
         {
-            if (!Validate(new CreateTableValidator(), newTable)) return;
+            if (!Validate(new CreateTableValidator(), newTable)) return null;
 
             if (await _restaurantRepository.TableAlreadyExists(newTable.TableNumber))
             {
                 await _meditorHandler.PublishNotification(new DomainNotification("table", RestaurantErrorMessages.TableNumberAlreadyExists));
-                return;
+                return null;
             }
 
-            _restaurantRepository.AddTable(_mapper.Map<Table>(newTable));
+            var table = _mapper.Map<Table>(newTable);
+            _restaurantRepository.AddTable(table);
 
             await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
+            return table;
         }
 
         public async Task<IEnumerable<Restaurant>> GetAll()

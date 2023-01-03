@@ -1,5 +1,4 @@
-﻿using MealCenter.Identity.Domain;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -16,7 +15,7 @@ namespace MealCenter.Identity.Application.Services
             _userManager = userManager;
         }
 
-        public async Task<string> GetJwtString(IdentityUser identity, UserProfile userProfile)
+        public async Task<string> GetJwtString(IdentityUser identity, Guid userProfileId)
         {
             var claimsIdentity = new ClaimsIdentity(new Claim[]
             {
@@ -24,7 +23,7 @@ namespace MealCenter.Identity.Application.Services
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, identity.Email),
                 new Claim("IdentityId", identity.Id),
-                new Claim("UserProfileId", userProfile.Id.ToString())
+                new Claim("UserProfileId", userProfileId.ToString())
             });
 
             var userRoles = await _userManager.GetRolesAsync(identity);

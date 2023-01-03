@@ -11,6 +11,7 @@
 
             //Identity
             builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connectionString));
+
             builder.Services.AddIdentityCore<IdentityUser>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -19,7 +20,10 @@
                 options.Password.RequiredLength = 5;
                 options.Password.RequireNonAlphanumeric = false;
             })
+            //.AddUserManager<IdentityUser>()
             .AddSignInManager<SignInManager<IdentityUser>>()
+            .AddRoles<IdentityRole>()
+            .AddRoleManager<RoleManager<IdentityRole>>()
             .AddEntityFrameworkStores<IdentityContext>();
         }
     }

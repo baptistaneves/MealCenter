@@ -41,6 +41,16 @@ namespace MealCenter.Registration.Infrastructure.Repository.Posts
             return await _context.Posts.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        public async Task<Post> GetPostWithPostCommentsIncludedById(Guid id)
+        {
+            return await _context.Posts.AsNoTracking().Include(p=> p.PostComments).FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<Post> GetPostWithPostReactionsIncludedById(Guid id)
+        {
+            return await _context.Posts.AsNoTracking().Include(p => p.PostReactions).FirstOrDefaultAsync(p => p.Id == id);
+        }
+
         public async Task<bool> PostAlreadyExists(string title)
         {
             return await _context.Posts.AsNoTracking().Where(p => p.Title == title).AnyAsync();
@@ -66,9 +76,9 @@ namespace MealCenter.Registration.Infrastructure.Repository.Posts
             _context.PostComments.Remove(postComment);
         }
 
-        public async Task<IEnumerable<PostComment>> GetAllPostComment()
+        public async Task<IEnumerable<PostComment>> GetAllPostComment(Guid postId)
         {
-            return await _context.PostComments.AsNoTracking().ToListAsync();
+            return await _context.PostComments.AsNoTracking().Where(pc => pc.PostId == postId).ToListAsync();
         }
 
         public async Task<PostComment> GetPostCommentById(Guid id)
@@ -86,9 +96,9 @@ namespace MealCenter.Registration.Infrastructure.Repository.Posts
             _context.PostReactions.Remove(reaction);
         }
 
-        public async Task<IEnumerable<PostReaction>> GetAllPostReaction()
+        public async Task<IEnumerable<PostReaction>> GetAllPostReaction(Guid postId)
         {
-            return await _context.PostReactions.AsNoTracking().ToListAsync();
+            return await _context.PostReactions.AsNoTracking().Where(pr => pr.PostId == postId).ToListAsync();
         }
 
         public async Task<PostReaction> GetPostReactionById(Guid id)

@@ -25,3 +25,18 @@ global using Microsoft.IdentityModel.Tokens;
 global using System.Text;
 global using MealCenter.Identity.Application.Commands;
 global using MealCenter.Identity.Application.Queries;
+global using MealCenter.Identity.Application.Services;
+global using MealCenter.Registration.Domain.Clients;
+global using MealCenter.Registration.Infrastructure.Repository.Clients;
+global using MealCenter.Registration.Application.Interfaces;
+global using MealCenter.Registration.Application.Services;
+global using MealCenter.Registration.Application.AutoMapper;
+global using MealCenter.Registration.Application.Contracts.Clients;
+global using MealCenter.Registration.Domain.Posts;
+global using MealCenter.Registration.Infrastructure.Repository.Posts;
+global using System.Security.Claims;
+global using MealCenter.Registration.Application.Contracts.Posts;
+global using MealCenter.Registration.Application.Contracts.Restaurants;
+
+
+

@@ -25,6 +25,9 @@ namespace MealCenter.Registration.Domain.Restaurants
             Status = status;
         }
 
+        //EF
+        protected Table() { }
+
         public void AssociateToRestaurant(Guid restaurantId)
         {
             RestaurantId = restaurantId;

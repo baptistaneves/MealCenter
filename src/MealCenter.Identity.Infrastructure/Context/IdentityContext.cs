@@ -1,11 +1,10 @@
-﻿using MealCenter.Core.Data;
-using MealCenter.Identity.Domain;
+﻿using MealCenter.Identity.Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace MealCenter.Identity.Infrastructure.Context
 {
-    public class IdentityContext : IdentityDbContext, IUnitOfWork
+    public class IdentityContext : IdentityDbContext
     {
         public DbSet<UserProfile> UserProfiles { get; set; }
 
@@ -13,12 +12,12 @@ namespace MealCenter.Identity.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(typeof(IdentityContext).Assembly);
+            base.OnModelCreating(builder);
 
-            base.OnModelCreating(builder);  
+            builder.ApplyConfigurationsFromAssembly(typeof(IdentityContext).Assembly);
         }
 
-        public async Task<bool> SaveAsync(CancellationToken cancellationToken)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity.GetType().GetProperty("CreatedAt") != null))
             {
@@ -36,7 +35,7 @@ namespace MealCenter.Identity.Infrastructure.Context
                 }
             }
 
-            return await base.SaveChangesAsync(cancellationToken) > 0;
+            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }

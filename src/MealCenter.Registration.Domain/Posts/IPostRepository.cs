@@ -6,6 +6,8 @@ namespace MealCenter.Registration.Domain.Posts
     {
         Task<IEnumerable<Post>> GetAll();
         Task<Post> GetById(Guid id);
+        Task<Post> GetPostWithPostCommentsIncludedById(Guid id);
+        Task<Post> GetPostWithPostReactionsIncludedById(Guid id);
         Task<bool> PostAlreadyExists(string title);
         Task<bool> PostAlreadyExists(Guid id, string title);
         void Add(Post entity);
@@ -13,13 +15,13 @@ namespace MealCenter.Registration.Domain.Posts
         void Remove(Post entity);
 
         Task<PostComment> GetPostCommentById(Guid id);
-        Task<IEnumerable<PostComment>> GetAllPostComment();
+        Task<IEnumerable<PostComment>> GetAllPostComment(Guid postId);
         void AddPostComment(PostComment comment); 
         void UpdatePostComment(PostComment postComment);
         void RemovePostComment(PostComment postComment);
 
         Task<PostReaction> GetPostReactionById(Guid id);
-        Task<IEnumerable<PostReaction>> GetAllPostReaction();
+        Task<IEnumerable<PostReaction>> GetAllPostReaction(Guid postId);
         void AddPostReaction(PostReaction reaction);
         void RemovePostReaction(PostReaction reaction);
     }

@@ -21,15 +21,16 @@ namespace MealCenter.Registration.Application.Services
             _mediatorHandler = mediatorHandler;
         }
 
-        public async Task Add(CreateClient request, string identityUserId, CancellationToken cancellationToken)
+        public async Task<Client> Add(CreateClient request, string identityUserId, CancellationToken cancellationToken)
         {
-            if(!Validate(new CreateClientValidation(), request)) return;
+            if(!Validate(new CreateClientValidation(), request)) return null;
 
-            var newClient = new Client(identityUserId, request.FirstName, request.LastName, request.Status, request.ImageUrl, request.Description);
+            var newClient = new Client(identityUserId, request.FirstName, request.LastName, request.Status, request.ImageUrl, request.Description, request.Phone, request.EmailAddress);
 
             _clientRepository.Add(newClient);
 
             await _clientRepository.UnitOfWork.SaveAsync(cancellationToken);
+            return newClient;
         }
 
         public async Task<IEnumerable<Client>> GetAll()
@@ -47,16 +48,24 @@ namespace MealCenter.Registration.Application.Services
             return await _clientRepository.GetTheNumberOfRegisteredClients();
         }
 
-        public async Task Remove(Guid id, CancellationToken cancellationToken)
+        public async Task Remove(Client client, CancellationToken cancellationToken)
         {
-            _clientRepository.Remove(await _clientRepository.GetById(id));
+            _clientRepository.Remove(client);
 
             await _clientRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 
-        public async Task Update(UpdateClient client, CancellationToken cancellationToken)
+        public async Task Update(Guid id, UpdateClient clientUpdated, CancellationToken cancellationToken)
         {
-            if (!Validate(new UpdateClientValidation(), client)) return;
+            if (!Validate(new UpdateClientValidation(), clientUpdated)) return;
+
+            var client = await _clientRepository.GetById(id);
+
+            if (client == null)
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("client", ClientErrorMessages.ClientNotFound));
+                return;
+            }
 
             _clientRepository.Update(_mapper.Map<Client>(client));
 

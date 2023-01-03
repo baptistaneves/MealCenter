@@ -8,9 +8,9 @@ using MealCenter.Registration.Domain.Restaurants;
 
 namespace MealCenter.Registration.Application.AutoMapper
 {
-    internal class RequestToDomainMappingProfile : Profile
+    public class RegistrationRequestToDomainMappingProfile : Profile
     {
-        public RequestToDomainMappingProfile()
+        public RegistrationRequestToDomainMappingProfile()
         {
             CreateMap<UpdateClient, Client>();
 

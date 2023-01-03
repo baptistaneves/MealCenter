@@ -24,6 +24,9 @@ namespace MealCenter.Registration.Domain.Restaurants
             Status = status;
         }
 
+        //EF
+        protected MenuOption() { }
+
         public void Activate() => Status = true;
 
         public void Deactivate() => Status = false;
