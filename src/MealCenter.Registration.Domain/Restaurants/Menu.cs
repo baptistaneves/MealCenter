@@ -40,6 +40,12 @@ namespace MealCenter.Registration.Domain.Restaurants
             _menuOptions.Add(newMenuOption);
         }
 
+        public void UpdateMenu(string type, bool status)
+        {
+            Type = type;
+            Status = status;
+        }
+
         public void UpdateMenuOption(MenuOption menuOptionUpdated)
         {
             menuOptionUpdated.AssociateToMenu(Id);

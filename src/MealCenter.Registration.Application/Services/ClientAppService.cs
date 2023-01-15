@@ -43,6 +43,18 @@ namespace MealCenter.Registration.Application.Services
             return await _clientRepository.GetById(id);
         }
 
+        public async Task<Client> GetClientByIdentityId(string identityId)
+        {
+            var client = await _clientRepository.GetClientByIdentityId(identityId);
+            if(client == null)
+            {
+                _mediatorHandler.PublishNotification(new DomainNotification("Restaurant", "There is no Client data for this identity"));
+                return null;
+            }
+
+            return client;
+        }
+
         public async Task<int> GetTheNumberOfRegisteredClients()
         {
             return await _clientRepository.GetTheNumberOfRegisteredClients();

@@ -8,7 +8,7 @@ namespace MealCenter.Registration.Application.Interfaces
         Task<IEnumerable<Post>> GetAll();
         Task<Post> GetById(Guid id);
         Task<Post> Add(CreatePost newPost, CancellationToken cancellationToken);
-        Task Update(Guid restaurantId, UpdatePost postUpdated, CancellationToken cancellationToken);
+        Task Update(Guid postId, Guid restaurantId, UpdatePost postUpdated, CancellationToken cancellationToken);
         Task Remove(Guid id, Guid restaurantId, CancellationToken cancellationToken);
 
         Task<PostComment> GetPostCommentById(Guid id);

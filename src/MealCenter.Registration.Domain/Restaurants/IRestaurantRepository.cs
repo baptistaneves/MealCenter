@@ -6,6 +6,7 @@ namespace MealCenter.Registration.Domain.Restaurants
     {
         Task<IEnumerable<Restaurant>> GetAll();
         Task<Restaurant> GetById(Guid id);
+        Task<Restaurant> GetRestaurantByIdentityId(string identityId);
         Task<int> GetTheNumberOfRegisteredRestaurants();
         Task<bool> RestaurantAlreadyExists(string name);
         Task<bool> RestaurantAlreadyExists(Guid id, string name);

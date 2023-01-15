@@ -13,8 +13,6 @@ namespace MealCenter.Registration.Application.Contracts.Posts
 
     public class UpdatePostComment
     {
-        public Guid Id { get; set; }
-
         [Required(ErrorMessage = "Comment is required")]
         public string Comment { get; set; }
     }

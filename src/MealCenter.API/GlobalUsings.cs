@@ -37,6 +37,15 @@ global using MealCenter.Registration.Infrastructure.Repository.Posts;
 global using System.Security.Claims;
 global using MealCenter.Registration.Application.Contracts.Posts;
 global using MealCenter.Registration.Application.Contracts.Restaurants;
+global using MealCenter.Registration.Domain.Restaurants;
+global using MealCenter.Registration.Infrastructure.Repository.Restaurants;
+global using MealCenter.API.Contracts.Common;
+global using System.Net;
+global using System.Text.Json;
+global using Microsoft.AspNetCore.Diagnostics;
+global using MealCenter.Core.DomainObjects;
+
+
 
 
 

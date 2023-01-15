@@ -29,6 +29,12 @@ namespace MealCenter.Registration.Domain.Posts
             ImageUrl = imageUrl;
         }
 
+        public void UpdatePost(string title, string content)
+        {
+            Title = title;
+            Content = content;
+        }
+
         public void UpdateImage(string newImageUrl)
         {
             ImageUrl = newImageUrl;

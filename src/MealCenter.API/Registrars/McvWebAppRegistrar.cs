@@ -4,6 +4,15 @@
     {
         public void RegisterPipelineComponents(WebApplication app)
         {
+            app.ConfigureExceptionHandler(app.Environment);
+
+            app.UseHttpsRedirection();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.MapControllers();
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -15,13 +24,6 @@
                         description.ApiVersion.ToString());
                 }
             });
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.MapControllers();
         }
     }
 }

@@ -41,6 +41,11 @@ namespace MealCenter.Registration.Infrastructure.Repository.Clients
             return await _context.Clients.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
         }
 
+        public async Task<Client> GetClientByIdentityId(string identityId)
+        {
+            return await _context.Clients.AsNoTracking().FirstOrDefaultAsync(c => c.IdentityUserId == identityId);
+        }
+
         public async Task<int> GetTheNumberOfRegisteredClients()
         {
             return await _context.Clients.CountAsync();
@@ -50,6 +55,5 @@ namespace MealCenter.Registration.Infrastructure.Repository.Clients
         {
             _context?.Dispose();
         }
-
     }
 }

@@ -27,6 +27,14 @@ namespace MealCenter.Registration.Domain.Restaurants
         //EF
         protected MenuOption() { }
 
+        public void UpdateMenuOption(Guid menuId, string name, decimal price, string ingredients)
+        {
+            MenuId = menuId;
+            Name = name;
+            Price = price;
+            Ingredients = ingredients;
+        }
+
         public void Activate() => Status = true;
 
         public void Deactivate() => Status = false;

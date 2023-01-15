@@ -183,8 +183,7 @@
         [ValidateModel]
         public async Task<ActionResult> UpdateRestaurant(Guid id, [FromBody] UpdateRestaurant updateRestaurant, CancellationToken cancellationToken)
         {
-            updateRestaurant.Id = id;
-            await _restaurantService.Update(updateRestaurant, cancellationToken);
+            await _restaurantService.Update(id, updateRestaurant, cancellationToken);
 
             return Response();
         }
@@ -194,8 +193,7 @@
         [ValidateModel]
         public async Task<ActionResult> UpdateMenu(Guid id, [FromBody] UpdateMenu updateMenu, CancellationToken cancellationToken)
         {
-            updateMenu.Id = id;
-            await _restaurantService.UpdateMenu(updateMenu, cancellationToken);
+            await _restaurantService.UpdateMenu(id, updateMenu, cancellationToken);
 
             return Response();
         }
@@ -205,8 +203,7 @@
         [ValidateModel]
         public async Task<ActionResult> UpdateMenuOption(Guid id, [FromBody] UpdateMenuOption updateMenuOption, CancellationToken cancellationToken)
         {
-            updateMenuOption.Id = id;
-            await _restaurantService.UpdateMenuOption(updateMenuOption, cancellationToken);
+            await _restaurantService.UpdateMenuOption(id, updateMenuOption, cancellationToken);
 
             return Response();
         }
@@ -216,8 +213,7 @@
         [ValidateModel]
         public async Task<ActionResult> UpdateTable(Guid id, [FromBody] UpdateTable updateTable, CancellationToken cancellationToken)
         {
-            updateTable.Id = id;
-            await _restaurantService.UpdateTable(updateTable, cancellationToken);
+            await _restaurantService.UpdateTable(id, updateTable, cancellationToken);
 
             return Response();
         }

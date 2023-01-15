@@ -21,5 +21,10 @@ namespace MealCenter.Registration.Domain.Posts
             Comment = comment;
         }
 
+        public void UpdatePostComment(string comment)
+        {
+            Comment = comment;
+        }
+
     }
 }

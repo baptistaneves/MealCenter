@@ -58,6 +58,8 @@
             public const string CreateAdminUserProfileIdentity = "create-user-admin";
             public const string GetAdminUserProfileById = "get-user-admin-profile-by-id/{id}";
             public const string LoginForAdminUser = "user-admin-login";
+            public const string LoginForClient = "client-login";
+            public const string LoginForRestaurant = "restaurant-login";
         }
 
         public static class Post

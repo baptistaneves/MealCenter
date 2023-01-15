@@ -28,6 +28,11 @@ namespace MealCenter.Registration.Domain.Restaurants
         //EF
         protected Table() { }
 
+        public void UpdateTable(int tableNumber)
+        {
+            TableNumber = tableNumber;
+        }
+
         public void AssociateToRestaurant(Guid restaurantId)
         {
             RestaurantId = restaurantId;

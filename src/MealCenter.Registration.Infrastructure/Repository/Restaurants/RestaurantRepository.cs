@@ -66,6 +66,11 @@ namespace MealCenter.Registration.Infrastructure.Repository.Restaurants
             return await _context.Restaurants.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
         }
 
+        public async Task<Restaurant> GetRestaurantByIdentityId(string identityId)
+        {
+            return await _context.Restaurants.AsNoTracking().FirstOrDefaultAsync(r => r.IdentityUserId == identityId);
+        }
+
         public async Task<Menu> GetMenuById(Guid id)
         {
             return await _context.Menus.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
@@ -118,22 +123,22 @@ namespace MealCenter.Registration.Infrastructure.Repository.Restaurants
 
         public void Update(Restaurant entity)
         {
-            _context.Restaurants.Remove(entity);
+            _context.Restaurants.Update(entity);
         }
 
         public void UpdateMenu(Menu menu)
         {
-            _context.Menus.Remove(menu);
+            _context.Menus.Update(menu);
         }
 
         public void UpdateMenuOption(MenuOption menuOption)
         {
-            _context.MenuOptions.Remove(menuOption);
+            _context.MenuOptions.Update(menuOption);
         }
 
         public void UpdateTable(Table table)
         {
-            _context.Tables.Remove(table);
+            _context.Tables.Update(table);
         }
 
         public async Task<int> GetTheNumberOfRegisteredRestaurants()
@@ -186,6 +191,5 @@ namespace MealCenter.Registration.Infrastructure.Repository.Restaurants
         {
             _context?.Dispose();
         }
-       
     }
 }

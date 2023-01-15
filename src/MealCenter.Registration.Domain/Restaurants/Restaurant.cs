@@ -24,11 +24,13 @@ namespace MealCenter.Registration.Domain.Restaurants
         public IReadOnlyCollection<Table> Tables;
         public IReadOnlyCollection<Post> Posts;
 
-        public Restaurant(string identityUserId, string name, string location, string imageUrl, bool status, 
+        public Restaurant(string identityUserId, string name, string emailAddress, string phone, string location, string imageUrl, bool status, 
             string description)
         {
             IdentityUserId = identityUserId;
             Name = name;
+            EmailAddress = emailAddress;
+            Phone = phone;
             Location = location;
             ImageUrl = imageUrl;
             Status = status;
@@ -41,6 +43,14 @@ namespace MealCenter.Registration.Domain.Restaurants
         public void Activate() => Status = true;
 
         public void Deactivate() => Status = false;
+
+        public void UpdateRestaurant(string name, string location, string description, string phone)
+        {
+            Name = name;
+            Location = location;
+            Description = description;  
+            Phone = phone;
+        }
 
         public void UpdateImage(string newImageUrl)
         {

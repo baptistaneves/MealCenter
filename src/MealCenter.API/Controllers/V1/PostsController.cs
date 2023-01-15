@@ -58,15 +58,15 @@
         [ValidateModel]
         public async Task<ActionResult> AddPostComment([FromBody] CreatePostComment postComment, CancellationToken cancellationToken)
         {
-            var identityId = HttpContext.GetIdentityIdClaimValue().ToString();
-            return Response(await _postAppService.AddPostComment(postComment, identityId, cancellationToken));
+            var identityUserId = HttpContext.GetIdentityIdClaimValue().ToString();
+            return Response(await _postAppService.AddPostComment(postComment, identityUserId, cancellationToken));
         }
 
         [HttpPost(ApiRoutes.Post.AddPostReaction)]
         public async Task<ActionResult> AddPostReaction([FromBody] CreatePostReaction postReaction, CancellationToken cancellationToken)
         {
-            var identityId = HttpContext.GetIdentityIdClaimValue().ToString();
-            return Response(await _postAppService.AddPostReaction(postReaction, identityId, cancellationToken));
+            var identityUserId = HttpContext.GetIdentityIdClaimValue().ToString();
+            return Response(await _postAppService.AddPostReaction(postReaction, identityUserId, cancellationToken));
         }
 
         [HttpPut(ApiRoutes.Post.UpdatePost)]
@@ -74,8 +74,7 @@
         [ValidateModel]
         public async Task<ActionResult> UpdatePost(Guid id, [FromBody] UpdatePost updatePost, CancellationToken cancellationToken)
         {
-            updatePost.Id = id;
-            await _postAppService.Update(HttpContext.GetRestaurantIdClaimValue(), updatePost, cancellationToken);
+            await _postAppService.Update(id, HttpContext.GetRestaurantIdClaimValue(), updatePost, cancellationToken);
             return Response();
         }
 
@@ -86,8 +85,6 @@
         {
             var restaurantId = HttpContext.GetRestaurantIdClaimValue();
             var identityId = HttpContext.GetIdentityIdClaimValue().ToString();
-
-            postComment.Id = postCommentId;
 
             await _postAppService.UpdatePostComment(postCommentId, postId, restaurantId, identityId, postComment, cancellationToken);
             return Response();

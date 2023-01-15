@@ -31,9 +31,6 @@ namespace MealCenter.Registration.Application.Validators.Posts
 
             RuleFor(p => p.Content)
                 .NotEmpty().WithMessage("Post content should not be empty");
-
-            RuleFor(p => p.ImageUrl)
-                .NotEmpty().WithMessage("Image is required to create a post");
         }
     }
 

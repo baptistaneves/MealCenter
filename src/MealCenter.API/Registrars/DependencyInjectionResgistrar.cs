@@ -26,6 +26,9 @@
             builder.Services.AddScoped<IClientRepository, ClientRepository>();
             builder.Services.AddScoped<IClientAppService, ClientAppService>();
 
+            builder.Services.AddScoped<IRestaurantAppService, RestaurantAppService>();
+            builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+
             builder.Services.AddScoped<IPostAppService, PostAppService>();
             builder.Services.AddScoped<IPostRepository, PostRepository>();
 

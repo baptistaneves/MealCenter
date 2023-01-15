@@ -12,14 +12,14 @@ namespace MealCenter.Registration.Application.Services
     public class RestaurantAppService : BaseService, IRestaurantAppService
     {
         private readonly IRestaurantRepository _restaurantRepository;
-        private readonly IMediatorHandler _meditorHandler;
+        private readonly IMediatorHandler _mediatorHandler;
         private readonly IMapper _mapper;
 
         public RestaurantAppService(IMapper mapper, IRestaurantRepository restaurantRepository, IMediatorHandler meditorHandler)
         {
             _mapper = mapper;
             _restaurantRepository = restaurantRepository;
-            _meditorHandler = meditorHandler;
+            _mediatorHandler = meditorHandler;
         }
 
         public async Task<Restaurant> Add(CreateRestaurant newRestaurant, string identityUserId, CancellationToken cancellationToken)
@@ -28,11 +28,11 @@ namespace MealCenter.Registration.Application.Services
 
             if(await _restaurantRepository.RestaurantAlreadyExists(newRestaurant.Name))
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("restaurant", RestaurantErrorMessages.RestaurantNameAlreadyExists));
+                await _mediatorHandler.PublishNotification(new DomainNotification("restaurant", RestaurantErrorMessages.RestaurantNameAlreadyExists));
                 return null;
             }
 
-            var restaurant = new Restaurant(identityUserId, newRestaurant.Name, newRestaurant.Location, newRestaurant.ImageUrl, newRestaurant.Status, newRestaurant.Description);
+            var restaurant = new Restaurant(identityUserId, newRestaurant.Name, newRestaurant.EmailAddress, newRestaurant.Phone, newRestaurant.Location, newRestaurant.ImageUrl, newRestaurant.Status, newRestaurant.Description);
             _restaurantRepository.Add(restaurant);
 
             await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
@@ -45,7 +45,7 @@ namespace MealCenter.Registration.Application.Services
 
             if(await _restaurantRepository.MenuAlreadyExists(newMenu.Type))
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("menu", RestaurantErrorMessages.MenuTypeAlreadyExists));
+                await _mediatorHandler.PublishNotification(new DomainNotification("menu", RestaurantErrorMessages.MenuTypeAlreadyExists));
                 return null;
             }
 
@@ -62,7 +62,7 @@ namespace MealCenter.Registration.Application.Services
 
             if (await _restaurantRepository.MenuAlreadyExists(newMenuOption.Name))
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("menuOption", RestaurantErrorMessages.MenuOptionNameAlreadyExists));
+                await _mediatorHandler.PublishNotification(new DomainNotification("menuOption", RestaurantErrorMessages.MenuOptionNameAlreadyExists));
                 return null;
             }
 
@@ -79,7 +79,7 @@ namespace MealCenter.Registration.Application.Services
 
             if (await _restaurantRepository.TableAlreadyExists(newTable.TableNumber))
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("table", RestaurantErrorMessages.TableNumberAlreadyExists));
+                await _mediatorHandler.PublishNotification(new DomainNotification("table", RestaurantErrorMessages.TableNumberAlreadyExists));
                 return null;
             }
 
@@ -113,6 +113,18 @@ namespace MealCenter.Registration.Application.Services
         public async Task<Restaurant> GetById(Guid id)
         {
             return await _restaurantRepository.GetById(id);
+        }
+
+        public async Task<Restaurant> GetRestaurantByIdentityId(string identityId)
+        {
+            var restaurant = await _restaurantRepository.GetRestaurantByIdentityId(identityId);
+            if(restaurant == null)
+            {
+                _mediatorHandler.PublishNotification(new DomainNotification("Restaurant", "There is no Restaurant data for this identity"));
+                return null;
+            }
+
+            return restaurant;
         }
 
         public async Task<Menu> GetMenuById(Guid id)
@@ -183,7 +195,7 @@ namespace MealCenter.Registration.Application.Services
             var table = await _restaurantRepository.GetTableById(id);
             if(table == null)
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.TableNotFound));
+                await _mediatorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.TableNotFound));
                 return;
             }
 
@@ -198,7 +210,7 @@ namespace MealCenter.Registration.Application.Services
             var table = await _restaurantRepository.GetTableById(id);
             if (table == null)
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.TableNotFound));
+                await _mediatorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.TableNotFound));
                 return;
             }
 
@@ -213,7 +225,7 @@ namespace MealCenter.Registration.Application.Services
             var restaurant = await _restaurantRepository.GetById(id);
             if (restaurant == null)
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.RestaurantNotFound));
+                await _mediatorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.RestaurantNotFound));
                 return;
             }
 
@@ -228,7 +240,7 @@ namespace MealCenter.Registration.Application.Services
             var restaurant = await _restaurantRepository.GetById(id);
             if (restaurant == null)
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.RestaurantNotFound));
+                await _mediatorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.RestaurantNotFound));
                 return;
             }
 
@@ -238,62 +250,101 @@ namespace MealCenter.Registration.Application.Services
             await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 
-        public async Task Update(UpdateRestaurant restaurant, CancellationToken cancellationToken)
+        public async Task Update(Guid id, UpdateRestaurant updatedRestaurant, CancellationToken cancellationToken)
         {
-            if (!Validate(new UpdateRestaurantValidator(), restaurant)) return;
+            if (!Validate(new UpdateRestaurantValidator(), updatedRestaurant)) return;
 
-            if (await _restaurantRepository.RestaurantAlreadyExists(restaurant.Id, restaurant.Name))
+            var restaurant = await _restaurantRepository.GetById(id);
+
+            if (restaurant == null)
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("restaurant", RestaurantErrorMessages.RestaurantNameAlreadyExists));
+                await _mediatorHandler.PublishNotification(new DomainNotification("Restaurant", RestaurantErrorMessages.RestaurantNotFound));
                 return;
             }
 
-            _restaurantRepository.Update(_mapper.Map<Restaurant>(restaurant));
+            if (await _restaurantRepository.RestaurantAlreadyExists(id, restaurant.Name))
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Restaurant", RestaurantErrorMessages.RestaurantNameAlreadyExists));
+                return;
+            }
+
+            restaurant.UpdateRestaurant(updatedRestaurant.Name, updatedRestaurant.Location, updatedRestaurant.Description, updatedRestaurant.Phone);
+            
+            _restaurantRepository.Update(restaurant);
 
             await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 
-        public async Task UpdateMenu(UpdateMenu menu, CancellationToken cancellationToken)
+        public async Task UpdateMenu(Guid id, UpdateMenu updatedMenu, CancellationToken cancellationToken)
         {
-            if (!Validate(new UpdateMenuValidator(), menu)) return;
+            if (!Validate(new UpdateMenuValidator(), updatedMenu)) return;
 
-            if (await _restaurantRepository.MenuAlreadyExists(menu.Id, menu.Type))
+            var menu = await _restaurantRepository.GetMenuById(id);
+
+            if (menu == null)
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("menu", RestaurantErrorMessages.MenuTypeAlreadyExists));
+                await _mediatorHandler.PublishNotification(new DomainNotification("Menu", RestaurantErrorMessages.MenuNotFound));
                 return;
             }
 
-            _restaurantRepository.UpdateMenu(_mapper.Map<Menu>(menu));
+            if (await _restaurantRepository.MenuAlreadyExists(id, updatedMenu.Type))
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Menu", RestaurantErrorMessages.MenuTypeAlreadyExists));
+                return;
+            }
+            menu.UpdateMenu(updatedMenu.Type, updatedMenu.Status);
+
+            _restaurantRepository.UpdateMenu(menu);
 
             await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 
-        public async Task UpdateMenuOption(UpdateMenuOption menuOption, CancellationToken cancellationToken)
+        public async Task UpdateMenuOption(Guid id, UpdateMenuOption updatedMenuOption, CancellationToken cancellationToken)
         {
-            if (!Validate(new UpdateMenuOptionValidator(), menuOption)) return;
+            if (!Validate(new UpdateMenuOptionValidator(), updatedMenuOption)) return;
 
-            if (await _restaurantRepository.MenuOptionAlreadyExists(menuOption.Id, menuOption.Name))
+            var menuOption = await _restaurantRepository.GetMenuOptionById(id);
+
+            if (menuOption == null)
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("menuOption", RestaurantErrorMessages.MenuOptionNameAlreadyExists));
+                await _mediatorHandler.PublishNotification(new DomainNotification("MenuOption", RestaurantErrorMessages.MenuOptionNotFound));
                 return;
             }
 
-            _restaurantRepository.UpdateMenuOption(_mapper.Map<MenuOption>(menuOption));
+            if (await _restaurantRepository.MenuOptionAlreadyExists(id, updatedMenuOption.Name))
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("MenuOption", RestaurantErrorMessages.MenuOptionNameAlreadyExists));
+                return;
+            }
+
+            menuOption.UpdateMenuOption(updatedMenuOption.MenuId, updatedMenuOption.Name, updatedMenuOption.Price, updatedMenuOption.Ingredients);
+
+            _restaurantRepository.UpdateMenuOption(menuOption);
 
             await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
 
-        public async Task UpdateTable(UpdateTable table, CancellationToken cancellationToken)
+        public async Task UpdateTable(Guid id, UpdateTable updatedTable, CancellationToken cancellationToken)
         {
-            if (!Validate(new UpdateTableValidator(), table)) return;
+            if (!Validate(new UpdateTableValidator(), updatedTable)) return;
 
-            if (await _restaurantRepository.TableAlreadyExists(table.Id, table.TableNumber))
+            var table = await _restaurantRepository.GetTableById(id);
+
+            if (table == null)
             {
-                await _meditorHandler.PublishNotification(new DomainNotification("table", RestaurantErrorMessages.TableNumberAlreadyExists));
+                await _mediatorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.TableNotFound));
                 return;
             }
 
-            _restaurantRepository.UpdateTable(_mapper.Map<Table>(table));
+            if (await _restaurantRepository.TableAlreadyExists(id, updatedTable.TableNumber))
+            {
+                await _mediatorHandler.PublishNotification(new DomainNotification("Table", RestaurantErrorMessages.TableNumberAlreadyExists));
+                return;
+            }
+
+            table.UpdateTable(updatedTable.TableNumber);
+
+            _restaurantRepository.UpdateTable(table);
 
             await _restaurantRepository.UnitOfWork.SaveAsync(cancellationToken);
         }
@@ -303,6 +354,6 @@ namespace MealCenter.Registration.Application.Services
         {
             _restaurantRepository?.Dispose();
         }
-
+        
     }
 }
