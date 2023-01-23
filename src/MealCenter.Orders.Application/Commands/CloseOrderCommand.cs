@@ -5,6 +5,11 @@ namespace MealCenter.Orders.Application.Commands
 {
     public class CloseOrderCommand : Command
     {
+        public CloseOrderCommand(Guid clientId)
+        {
+            ClientId = clientId;
+        }
+
         public Guid ClientId { get; private set; }
 
         public override bool IsValid()

@@ -16,6 +16,7 @@ namespace MealCenter.Registration.Application.Interfaces
         Task Remove(Guid id, CancellationToken cancellationToken);
 
         Task<Table> GetTableById(Guid id);
+        Task<Table> GetTableByClientId(Guid clientId);
         Task<IEnumerable<Table>> GetAllTable();
         Task<IEnumerable<Table>> GetTablesByRestaurantId(Guid restaurantId);
         Task<Table> AddTable(CreateTable newTable, CancellationToken cancellationToken);

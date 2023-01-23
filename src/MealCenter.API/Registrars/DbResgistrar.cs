@@ -11,6 +11,9 @@
 
             //Identity
             builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connectionString));
+            
+            //Catalog
+            builder.Services.AddDbContext<CatalogContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddIdentityCore<IdentityUser>(options =>
             {

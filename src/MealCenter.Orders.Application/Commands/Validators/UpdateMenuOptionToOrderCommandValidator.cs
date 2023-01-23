@@ -6,8 +6,6 @@ namespace MealCenter.Orders.Application.Commands.Validators
     {
         public UpdateMenuOptionToOrderCommandValidator()
         {
-            RuleFor(o => o.OrderId).NotEqual(Guid.Empty).WithMessage("The ID order is invalid");
-
             RuleFor(o => o.ClientId).NotEqual(Guid.Empty).WithMessage("The ID client is invalid");
 
             When(o => o.MenuOptionId != Guid.Empty, () =>

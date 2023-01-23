@@ -52,14 +52,11 @@ namespace MealCenter.Catalog.Domain
             return Validate(newProduct);
         }
 
-        public void UpdateProduct(string name, string description, bool status, decimal price, Guid categoryId, string imageUrl)
+        public void UpdateProduct(string name, string description, decimal price)
         {
             Name = name;
             Description = description;
-            Status = status;
             Price = price;
-            CategoryId = categoryId;
-            ImageUrl = imageUrl;
 
             Validate(this);
         }

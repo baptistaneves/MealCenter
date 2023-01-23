@@ -96,6 +96,11 @@ namespace MealCenter.Registration.Infrastructure.Repository.Restaurants
             return await _context.Tables.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
         }
 
+        public async Task<Table> GetTableByClientId(Guid clientId)
+        {
+            return await _context.Tables.AsNoTracking().FirstOrDefaultAsync(r => r.ClientId == clientId);
+        }
+
         public async Task<IEnumerable<Table>> GetTablesByRestaurantId(Guid restaurantId)
         {
             return await _context.Tables.AsNoTracking().Where(t => t.RestaurantId == restaurantId).ToListAsync();

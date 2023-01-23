@@ -152,6 +152,11 @@ namespace MealCenter.Registration.Application.Services
             return await _restaurantRepository.GetTableById(id);
         }
 
+        public async Task<Table> GetTableByClientId(Guid clientId)
+        {
+            return await _restaurantRepository.GetTableByClientId(clientId);
+        }
+
         public async Task<IEnumerable<Table>> GetTablesByRestaurantId(Guid restaurantId)
         {
             return await _restaurantRepository.GetTablesByRestaurantId(restaurantId);
@@ -354,6 +359,5 @@ namespace MealCenter.Registration.Application.Services
         {
             _restaurantRepository?.Dispose();
         }
-        
     }
 }

@@ -21,9 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MealCenter.Catalog.Application\MealCenter.Catalog.Application.csproj" />
+    <ProjectReference Include="..\MealCenter.Catalog.Infrastructure\MealCenter.Catalog.Infrastructure.csproj" />
     <ProjectReference Include="..\MealCenter.Core\MealCenter.Core.csproj" />
     <ProjectReference Include="..\MealCenter.Identity.Application\MealCenter.Identity.Application.csproj" />
     <ProjectReference Include="..\MealCenter.Identity.Infrastructure\MealCenter.Identity.Infrastructure.csproj" />
+    <ProjectReference Include="..\MealCenter.Orders.Application\MealCenter.Orders.Application.csproj" />
     <ProjectReference Include="..\MealCenter.Registration.Application\MealCenter.Registration.Application.csproj" />
     <ProjectReference Include="..\MealCenter.Registration.Infrastructure\MealCenter.Registration.Infrastructure.csproj" />
   </ItemGroup>

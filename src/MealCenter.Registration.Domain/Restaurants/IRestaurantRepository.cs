@@ -15,6 +15,7 @@ namespace MealCenter.Registration.Domain.Restaurants
         void Remove(Restaurant entity);
 
         Task<Table> GetTableById(Guid id);
+        Task<Table> GetTableByClientId(Guid clientId);
         Task<IEnumerable<Table>> GetAllTable();
         Task<IEnumerable<Table>> GetAllFreeTable();
         Task<IEnumerable<Table>> GetTablesByRestaurantId(Guid restaurantId);

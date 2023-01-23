@@ -5,6 +5,21 @@ namespace MealCenter.Orders.Application.Commands
 {
     public class AddMenuOptionToOrderCommand : Command
     {
+        public AddMenuOptionToOrderCommand(Guid clientId, Guid restaurantId, Guid tableId, Guid menuOptionId, Guid productId, string menuOptionName, string productName, decimal menuOptionPrice, decimal productPrice, int productQuantity, int menuOptionQuantity)
+        {
+            ClientId = clientId;
+            RestaurantId = restaurantId;
+            TableId = tableId;
+            MenuOptionId = menuOptionId;
+            ProductId = productId;
+            MenuOptionName = menuOptionName;
+            ProductName = productName;
+            MenuOptionPrice = menuOptionPrice;
+            ProductPrice = productPrice;
+            ProductQuantity = productQuantity;
+            MenuOptionQuantity = menuOptionQuantity;
+        }
+
         public Guid ClientId { get; private set; }
         public Guid RestaurantId { get; private set; }
         public Guid TableId { get; private set; }

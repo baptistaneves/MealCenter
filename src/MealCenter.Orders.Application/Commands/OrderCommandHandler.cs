@@ -65,7 +65,7 @@ namespace MealCenter.Orders.Application.Commands
                 return false;
             }
 
-            var menuOptionToOrder = await _orderRepository.GetMenuOptionToOrderByOrder(command.OrderId, command.MenuOptionId, command.ProductId);
+            var menuOptionToOrder = await _orderRepository.GetMenuOptionToOrderByOrder(order.Id, command.MenuOptionId, command.ProductId);
 
             if(!order.ExistingMenuOptionToOrder(menuOptionToOrder))
             {

@@ -44,6 +44,16 @@ global using System.Net;
 global using System.Text.Json;
 global using Microsoft.AspNetCore.Diagnostics;
 global using MealCenter.Core.DomainObjects;
+global using MealCenter.Catalog.Application.Interfaces;
+global using MealCenter.Catalog.Application.ViewModels;
+global using MealCenter.Catalog.Infrastructure.Context;
+global using MealCenter.Catalog.Application.Services;
+global using MealCenter.Catalog.Domain;
+global using MealCenter.Catalog.Infrastructure.Repository;
+global using MealCenter.Orders.Application.Queries;
+global using MealCenter.Orders.Application.Queries.ViewModels;
+global using MealCenter.Orders.Application.Commands;
+
 
 
 
