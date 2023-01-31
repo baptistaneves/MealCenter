@@ -39,5 +39,12 @@ public class DependencyInjectionResgistrar : IWebApplicationBuilderRegistrar
 
         builder.Services.AddScoped<IProductAppService, ProductAppService>();
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+        //Order
+        builder.Services.AddScoped<OrderContext>();
+
+        builder.Services.AddScoped<IOrderQueries, OrderQueries>();
+        builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+        
     }
 }

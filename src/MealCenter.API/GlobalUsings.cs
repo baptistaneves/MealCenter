@@ -53,9 +53,6 @@ global using MealCenter.Catalog.Infrastructure.Repository;
 global using MealCenter.Orders.Application.Queries;
 global using MealCenter.Orders.Application.Queries.ViewModels;
 global using MealCenter.Orders.Application.Commands;
-
-
-
-
-
-
+global using MealCenter.Orders.Domain;
+global using MealCenter.Orders.Infrastructure.Context;
+global using MealCenter.Orders.Infrastructure.Repository;

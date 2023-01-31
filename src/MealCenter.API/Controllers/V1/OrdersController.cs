@@ -23,7 +23,14 @@ public class OrdersController : BaseController
     [HttpGet(ApiRoutes.Order.MyCart)]
     public async Task<ActionResult> MyCart()
     {
-        return Ok(await _orderQueries.GetClientOrder(HttpContext.GetClientIdClaimValue()));
+        var order = await _orderQueries.GetClientOrder(HttpContext.GetClientIdClaimValue());
+        if(order == null)
+        {
+            NotifyError("Order", "There is no order for this client");
+            return Response();
+        }
+
+        return Response(order);
     }
 
     [HttpGet(ApiRoutes.Order.StartOrder)]

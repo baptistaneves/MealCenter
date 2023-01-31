@@ -5,9 +5,11 @@
     public class ProductsController : BaseController
     {
         private readonly IProductAppService _produtoService;
-        public ProductsController(IMediatorHandler mediatorHandler, 
-                                  INotificationHandler<DomainNotification> notifications) : base(mediatorHandler, notifications)
+        public ProductsController(IMediatorHandler mediatorHandler,
+                                  INotificationHandler<DomainNotification> notifications,
+                                  IProductAppService produtoService) : base(mediatorHandler, notifications)
         {
+            _produtoService = produtoService;
         }
 
         [HttpGet(ApiRoutes.Product.GetAllProducts)]

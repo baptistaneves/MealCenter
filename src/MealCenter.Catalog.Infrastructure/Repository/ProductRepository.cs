@@ -90,7 +90,7 @@ namespace MealCenter.Catalog.Infrastructure.Repository
 
         public void UpdateCategory(Category category)
         {
-            _context.Categories.Remove(category);
+            _context.Categories.Update(category);
         }
 
         public void Dispose()

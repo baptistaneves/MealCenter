@@ -15,7 +15,7 @@ namespace MealCenter.Orders.Application.Queries
         public async Task<ClientOrderViewModel> GetClientOrder(Guid clientId)
         {
             var order = await _orderRepository.GetDraftOrderByClientId(clientId);
-            if (clientId == null) return null;
+            if (order == null) return null;
 
             var clientOrder = new ClientOrderViewModel
             {

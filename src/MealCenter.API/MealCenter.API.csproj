@@ -27,6 +27,7 @@
     <ProjectReference Include="..\MealCenter.Identity.Application\MealCenter.Identity.Application.csproj" />
     <ProjectReference Include="..\MealCenter.Identity.Infrastructure\MealCenter.Identity.Infrastructure.csproj" />
     <ProjectReference Include="..\MealCenter.Orders.Application\MealCenter.Orders.Application.csproj" />
+    <ProjectReference Include="..\MealCenter.Orders.Infrastructure\MealCenter.Orders.Infrastructure.csproj" />
     <ProjectReference Include="..\MealCenter.Registration.Application\MealCenter.Registration.Application.csproj" />
     <ProjectReference Include="..\MealCenter.Registration.Infrastructure\MealCenter.Registration.Infrastructure.csproj" />
   </ItemGroup>

@@ -15,6 +15,9 @@
             //Catalog
             builder.Services.AddDbContext<CatalogContext>(options => options.UseSqlServer(connectionString));
 
+            //Order
+            builder.Services.AddDbContext<OrderContext>(options => options.UseSqlServer(connectionString)); 
+
             builder.Services.AddIdentityCore<IdentityUser>(options =>
             {
                 options.Password.RequireDigit = false;

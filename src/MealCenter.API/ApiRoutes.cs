@@ -85,7 +85,7 @@ public class ApiRoutes
     {
         public const string GetAllProducts = "get-all-products";
         public const string GetAllCategories = "get-all-categories";
-        public const string GetAllProductsByCategoryId = "get-all-products-by-id/{categoryId}";
+        public const string GetAllProductsByCategoryId = "get-all-products-by-category-id/{categoryId}";
         public const string GetProductById = "get-product-by-id/{id}";
         public const string GetCategoryById = "get-category-by-id/{id}";
         public const string RemoveProduct = "remove-product/{id}";
