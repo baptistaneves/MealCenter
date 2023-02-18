@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "MealCenter.Orders.Domain": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:60995;http://localhost:61013"
+    }
+  }
+}

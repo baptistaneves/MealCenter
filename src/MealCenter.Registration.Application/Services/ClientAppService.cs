@@ -30,6 +30,7 @@ namespace MealCenter.Registration.Application.Services
             _clientRepository.Add(newClient);
 
             await _clientRepository.UnitOfWork.SaveAsync(cancellationToken);
+
             return newClient;
         }
 
@@ -48,7 +49,7 @@ namespace MealCenter.Registration.Application.Services
             var client = await _clientRepository.GetClientByIdentityId(identityId);
             if(client == null)
             {
-                _mediatorHandler.PublishNotification(new DomainNotification("Restaurant", "There is no Client data for this identity"));
+                await _mediatorHandler.PublishNotification(new DomainNotification("Restaurant", "There is no Client data for this identity"));
                 return null;
             }
 

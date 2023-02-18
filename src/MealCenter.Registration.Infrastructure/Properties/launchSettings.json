@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "MealCenter.Registration.Infrastructure": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:60996;http://localhost:61016"
+    }
+  }
+}
